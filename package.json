@@ -1,0 +1,31 @@
+{
+    "name": "bhousegql",
+    "version": "1.0.0",
+    "description": "Bhouse Graph QL Api Server",
+    "main": "index.js",
+    "author": "Matt Tamal",
+    "license": "ISC",
+    "dependencies": {
+        "apollo-server": "^2.9.7",
+        "graphql": "^14.5.8"
+    },
+    "devDependencies": {
+        "@babel/cli": "^7.7.0",
+        "@babel/core": "^7.7.2",
+        "@babel/node": "^7.7.0",
+        "@babel/preset-env": "^7.7.1",
+        "cross-env": "^6.0.3",
+        "nodemon": "^1.19.4",
+        "prettier": "^1.18.2",
+        "rimraf": "^3.0.0"
+    },
+    "prettier": {
+        "tabWidth": 4,
+        "tabs": true,
+        "singleQuote": true
+    },
+    "scripts": {
+        "start": "nodemon --exec babel-node src/index --copy-files",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    }
+}
