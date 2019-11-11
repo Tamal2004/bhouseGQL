@@ -1,20 +1,12 @@
 import { ApolloServer, makeExecutableSchema } from 'apollo-server';
+import { merge } from 'lodash';
 
-// Local
-import { Book } from './books';
-import { Query } from './query';
-import books from './data';
+// Domains
+import { Book, bookResolvers } from './books';
+import { Query, queryResolvers } from './queries';
 
-
-// Resolvers define the technique for fetching the types defined in the
-// schema. This resolver retrieves books from the "books" array above.
-const resolvers = {
-    Query: {
-        books: () => books,
-        book: (_, { id }) =>
-            books.reduce((acm, book) => (book.id == id ? book : acm), undefined)
-    }
-};
+// Root resolver
+const resolvers = merge(queryResolvers, bookResolvers);
 
 const schema = makeExecutableSchema({
     typeDefs: [Query, Book],
