@@ -1,30 +1,10 @@
-const { ApolloServer, gql, makeExecutableSchema } = require('apollo-server');
-const Book = require('./books/typeDef');
-const books = require('./data');
+import { ApolloServer, makeExecutableSchema } from 'apollo-server';
 
+// Local
+import { Book } from './books';
+import { Query } from './query';
+import books from './data';
 
-// A schema is a collection of type definitions (hence "typeDefs")
-// that together define the "shape" of queries that are executed against
-// your data.
-const Query = gql`
-    # Comments in GraphQL strings (such as this one) start with the hash (#) symbol.
-
-    # This "Book" type defines the queryable fields for every book in our data source.
-    
-    type Book {
-        id: Int!
-        title: String
-        author: String
-    }
-
-    # The "Query" type is special: it lists all of the available queries that
-    # clients can execute, along with the return type for each. In this
-    # case, the "books" query returns an array of zero or more Books (defined above).
-    type Query {
-        books: [Book]
-        book(id: Int!): Book
-    }
-`;
 
 // Resolvers define the technique for fetching the types defined in the
 // schema. This resolver retrieves books from the "books" array above.
@@ -37,7 +17,7 @@ const resolvers = {
 };
 
 const schema = makeExecutableSchema({
-    typeDefs: [Book],
+    typeDefs: [Query, Book],
     resolvers
 });
 

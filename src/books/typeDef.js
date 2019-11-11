@@ -1,17 +1,11 @@
 import { gql } from 'apollo-server';
 
-econst typeDef = gql`
+const typeDef = gql`
     type Book {
         id: Int!
         title: String
         author: String
     }
-    type Query {
-        books: [Book]
-        book(id: Int!): Book
-    }
 `;
 
-// export { typeDef as default, typeDef };
-
-module.exports = typeDef;
+export { typeDef as default, typeDef as Book };
