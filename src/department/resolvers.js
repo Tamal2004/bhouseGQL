@@ -1,24 +1,24 @@
-import { parseList, parseItem } from '../libs';
+import { composeConnection, queryFactory } from '../libs';
 
 // Local
 import keymap from './keymap';
 import { TABLE_DEPARTMENTS } from './constants';
 
-const queryDepartment = async (params = {}, db) => {
-    const loadedParams = { table: TABLE_DEPARTMENTS, ...params };
-    const department = await db.query(loadedParams);
-    return parseList(department, keymap);
-};
+const queryDepartment = queryFactory(TABLE_DEPARTMENTS, keymap);
 
-const listDepartments = async (_, __, { dataSources: { db } }) => {
-    return await queryDepartment(null, db);
-};
+const listDepartments = async (_, { first, after}, { dataSources: { db } }) => composeConnection({
+    first,
+    after,
+    key: keymap.id,
+    nodeList: await queryDepartment(null, db, false),
+    keymap
+});
 
 const getDepartment = async (_, { id }, { dataSources: { db } }) => {
     const params = {
         where: { DepartmentId: id }
     };
-    const [department] = await queryDepartment(params, db);
+    const [department = null] = await queryDepartment(params, db);
     return department;
 };
 

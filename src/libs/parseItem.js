@@ -1,14 +1,18 @@
-export const parseItem = (item = null, keyMap) => {
-    const isValidKey = key => !!keyMap.hasOwnProperty(key);
+export const parseItem = (item = null, keymap) => {
+    const localKeys = Object.keys(keymap);
+    const dbKeys = Object.values(keymap);
 
-    // Returns null if item doesn't exist
-    // Else returns an object mapped with updated keys
-    return item && Object.entries(item).reduce(
-        (acm, [key, value]) =>
-            isValidKey ? { ...acm, [keyMap[key]]: value } : acm,
-        {}
+    return (
+        item &&
+        Object.entries(item).reduce((acm, [key, value]) => {
+            const keyIndex = dbKeys.indexOf(key);
+            return keyIndex > -1
+                ? { ...acm, [localKeys[keyIndex]]: value }
+                : acm;
+        }, {})
     );
 };
 
 // Parses a list of items
-export const parseList = (list, keyMap) => list.map(item => parseItem(item, keyMap));
+export const parseList = (list, keyMap) =>
+    list.map(item => parseItem(item, keyMap));

@@ -1,35 +1,42 @@
-import { parseList, parseItem } from '../libs';
+import { composeConnection, queryFactory} from '../libs';
 
 // Local
 import keymap from './keymap';
 import { TABLE_BUYERS } from './constants';
 
 // Global
-import { queryDepartment } from "../department";
+import { queryDepartment } from '../department';
 
+const queryBuyer = queryFactory(TABLE_BUYERS, keymap);
 
-const listBuyers = async (_, __, { dataSources: { db } }) => {
-    const params = {
-        table: TABLE_BUYERS
-    };
-    const buyers = await db.query(params);
-    return parseList(buyers, keymap);
-};
+const listBuyers = async (_, { first, after }, { dataSources: { db } }) =>
+    composeConnection({
+        first,
+        after,
+        key: keymap.id,
+        nodeList: await queryBuyer(null, db, false),
+        keymap
+    });
 
 const getBuyer = async (_, { id }, { dataSources: { db } }) => {
     const params = {
-        table: TABLE_BUYERS,
         where: { BuyerID: id }
     };
-    const [buyer = null] = await db.query(params);
-    return parseItem(buyer, keymap);
+    const [buyer = null] = await queryBuyer(params, db);
+    return buyer;
 };
 
-const listDepartmentsByBuyer = async ({ id }, _, { dataSources: { db } }) => {
+const listDepartmentsByBuyer = async ({ id }, { first, after}, { dataSources: { db } }) => {
     const params = {
-        where: { BuyerID: id}
+        where: { BuyerID: id }
     };
-    return await queryDepartment(params, db);
+    return composeConnection({
+        first,
+        after,
+        key: keymap.id,
+        nodeList: await queryDepartment(params, db, false),
+        keymap
+    });
 };
 
 const resolvers = {

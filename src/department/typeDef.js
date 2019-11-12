@@ -2,7 +2,7 @@ import { gql } from 'apollo-server';
 
 const typeDef = gql`
     extend type Query {
-        listDepartments: [Department]
+        listDepartments(first: Int after: Int): DepartmentConnection
         getDepartment(id: Int!): Department
     }
 
@@ -17,6 +17,22 @@ const typeDef = gql`
         isActive: Boolean
         isDispatch: Boolean
         isRetailer: Boolean
+    }
+
+    type DepartmentConnection {
+        totalCount: Int
+        pageInfo: PageInfo
+        edges: [DepartmentEdge]
+    }
+
+    type DepartmentEdge {
+        cursor: Int
+        node: Department
+    }
+
+    type PageInfo {
+        lastCursor: Int
+        hasNextPage: Boolean
     }
 `;
 

@@ -1,14 +1,14 @@
 const keymap = {
-    DepartmentId: 'id',
-    Department: 'department',
-    DepartmentCode: 'code',
-    BuyerID: 'buyerId',
-    BuyerName: 'buyer',
-    DispatchCode: 'dispatch',
-    DepartmentNo: 'departmentNumber',
-    IsActive: 'isActive',
-    IsDispatch: 'isDispatch',
-    IsRetailer: 'isRetailer'
+    id: 'DepartmentId',
+    department: 'Department',
+    code: 'DepartmentCode',
+    buyerId: 'BuyerID',
+    buyer: 'BuyerName',
+    dispatch: 'DispatchCode',
+    departmentNumber: 'DepartmentNo',
+    isActive: 'IsActive',
+    isDispatch: 'IsDispatch',
+    isRetailer: 'IsRetailer'
 };
 
 export { keymap as default, keymap };
