@@ -2,7 +2,7 @@ import { gql } from 'apollo-server';
 
 const typeDef = gql`
     type Query {
-        books: [Book]
+        _empty: String
     }
 `;
 

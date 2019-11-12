@@ -1,7 +1,12 @@
 import { gql } from 'apollo-server';
 
 const typeDef = gql`
-    type Book {
+    extend type Query {
+        listBuyers: [Buyer]
+        getBuyer(id: Int!): Buyer
+    }
+
+    type Buyer {
         id: Int!
         buyer: String
         code: String
@@ -23,7 +28,8 @@ const typeDef = gql`
         isActive: Boolean
         isDispatch: Boolean
         isRetailer: Boolean
+        departments: [Department]
     }
 `;
 
-export { typeDef as default, typeDef as Book };
+export { typeDef as default, typeDef as Buyer };

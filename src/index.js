@@ -5,8 +5,9 @@ import { merge } from 'lodash';
 import SQLDatabase from './db';
 
 // Domains
-import { Book, bookResolvers } from './books';
-import { Query, queryResolvers } from './queries';
+import { Buyer, buyerResolvers } from './buyer';
+import { Department, departmentResolvers } from './department';
+import { Query, queryResolvers } from './query';
 
 const knexConfig = {
     client: 'mssql',
@@ -21,10 +22,10 @@ const knexConfig = {
 const db = new SQLDatabase(knexConfig);
 
 // Root resolver
-const resolvers = merge(queryResolvers, bookResolvers);
+const resolvers = merge(queryResolvers, buyerResolvers, departmentResolvers);
 
 const schema = makeExecutableSchema({
-    typeDefs: [Query, Book],
+    typeDefs: [Query, Buyer, Department],
     resolvers
 });
 

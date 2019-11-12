@@ -1,21 +1,16 @@
 import { SQLDataSource } from 'datasource-sql';
 
-const MINUTE = 60;
-
 class SQLDatabase extends SQLDataSource {
-    getBuyers() {
-        return this.db
-            .select('*')
-            .from('buyerMST')
-            .cache(MINUTE);
-    }
-    getBuyer({ id }) {
-        return this.db
-            .select('*')
-            .from('buyerMST')
-            .where({ BuyerID: id })
-            .cache(MINUTE);
-    }
+    cacheTimeout = 60;
+
+    query = ({ columns = '*', table, where = undefined }) => {
+        let query = this.db.select(columns).from(table);
+
+        if (typeof where !== 'undefined') {
+            query = query.where(where);
+        }
+        return query.cache(this.cacheTimeout);
+    };
 }
 
 export { SQLDatabase as default, SQLDatabase };
