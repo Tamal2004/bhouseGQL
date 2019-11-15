@@ -30,7 +30,10 @@
         "singleQuote": true
     },
     "scripts": {
-        "start": "nodemon --exec babel-node src/index --copy-files",
+        "start": "nodemon --exec npm run babel",
+        "start-prettier": "nodemon --exec npm run prettier && npm run babel",
+        "babel": "babel-node src/index --copy-files",
+        "prettier": "node_modules/.bin/prettier --loglevel silent --write \"src/**\"",
         "test": "echo \"Error: no test specified\" && exit 1"
     }
 }

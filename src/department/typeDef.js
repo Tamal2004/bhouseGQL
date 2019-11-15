@@ -2,7 +2,7 @@ import { gql } from 'apollo-server';
 
 const typeDef = gql`
     extend type Query {
-        listDepartments(first: Int after: Int): DepartmentConnection
+        listDepartments(first: Int, after: Int): DepartmentConnection
         getDepartment(id: Int!): Department
     }
 

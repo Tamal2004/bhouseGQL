@@ -1,9 +1,9 @@
-const keymap={
-    id:'SampleFactoryID',
-	factory:'SampleFactoryName',
-	code:'FactoryCode',
-	supplierNo:'SupplierNo',
-	countryId:'COUNTRYID'
+const keymap = {
+    id: 'SampleFactoryID',
+    factory: 'SampleFactoryName',
+    code: 'FactoryCode',
+    supplierNo: 'SupplierNo',
+    countryId: 'COUNTRYID'
 };
 
-export {keymap as default, keymap};
+export { keymap as default, keymap };

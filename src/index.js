@@ -7,8 +7,8 @@ import SQLDatabase from './db';
 // Domains
 import { Buyer, buyerResolvers } from './buyer';
 import { Department, departmentResolvers } from './department';
-import {SampleFactory,sampleFactoryResolvers} from './sampleFactory';
-import {Country,countryResolvers} from './country';
+import { SampleFactory, sampleFactoryResolvers } from './sampleFactory';
+import { Country, countryResolvers } from './country';
 import { Query, queryResolvers } from './query';
 
 const knexConfig = {
@@ -25,15 +25,15 @@ const db = new SQLDatabase(knexConfig);
 
 // Root resolver
 const resolvers = merge(
-    queryResolvers, 
-    buyerResolvers, 
+    queryResolvers,
+    buyerResolvers,
     departmentResolvers,
     sampleFactoryResolvers,
     countryResolvers
-    );
+);
 
 const schema = makeExecutableSchema({
-    typeDefs: [Query, Buyer, Department,SampleFactory,Country],
+    typeDefs: [Query, Buyer, Department, SampleFactory, Country],
     resolvers
 });
 

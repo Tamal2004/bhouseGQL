@@ -2,7 +2,7 @@ import { gql } from 'apollo-server';
 
 const typeDef = gql`
     extend type Query {
-        listBuyers(first: Int after: Int): BuyerConnection
+        listBuyers(first: Int, after: Int): BuyerConnection
         getBuyer(id: Int!): Buyer
     }
 
@@ -28,7 +28,7 @@ const typeDef = gql`
         isActive: Boolean
         isDispatch: Boolean
         isRetailer: Boolean
-        departments(first: Int after: Int): DepartmentConnection
+        departments(first: Int, after: Int): DepartmentConnection
     }
 
     type BuyerConnection {
@@ -41,8 +41,6 @@ const typeDef = gql`
         cursor: Int
         node: Buyer
     }
-
-    
 `;
 
 export { typeDef as default, typeDef as Buyer };
