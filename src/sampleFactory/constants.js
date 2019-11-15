@@ -1,1 +1,1 @@
-export const TABLE_SAMPLEFACTORIES='SampleFactoryMST';
+export const TABLE_SAMPLEFACTORIES = 'SampleFactoryMST';

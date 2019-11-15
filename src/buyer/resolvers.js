@@ -1,4 +1,4 @@
-import { composeConnection, queryFactory} from '../libs';
+import { composeConnection, queryFactory } from '../libs';
 
 // Local
 import keymap from './keymap';
@@ -26,7 +26,11 @@ const getBuyer = async (_, { id }, { dataSources: { db } }) => {
     return buyer;
 };
 
-const listDepartmentsByBuyer = async ({ id }, { first, after}, { dataSources: { db } }) => {
+const listDepartmentsByBuyer = async (
+    { id },
+    { first, after },
+    { dataSources: { db } }
+) => {
     const params = {
         where: { BuyerID: id }
     };

@@ -1,30 +1,34 @@
-import {composeConnection, queryFactory} from '../libs';
+import { composeConnection, queryFactory } from '../libs';
 
 // Local
 import keymap from './keymap';
-import {TABLE_SAMPLEFACTORIES} from './constants';
+import { TABLE_SAMPLEFACTORIES } from './constants';
 
 // Global
 //import { queryDepartment } from '../department';
 
 const querySampleFactory = queryFactory(TABLE_SAMPLEFACTORIES, keymap);
 
-const listSampleFactories=async(_,{first,after},{dataSources:{db}})=>
+const listSampleFactories = async (
+    _,
+    { first, after },
+    { dataSources: { db } }
+) =>
     composeConnection({
         first,
         after,
         key: keymap.id,
-        nodeList: await querySampleFactory(null,db,false),
+        nodeList: await querySampleFactory(null, db, false),
         keymap
     });
 
-const getSampleFactory=async(_,{id},{dataSources:{db}})=>{
-    const params={
-        where:{SampleFactoryID:id}
+const getSampleFactory = async (_, { id }, { dataSources: { db } }) => {
+    const params = {
+        where: { SampleFactoryID: id }
     };
-    const [sampleFactory=null]=await querySampleFactory(params,db);
+    const [sampleFactory = null] = await querySampleFactory(params, db);
     return sampleFactory;
-}
+};
 
 /* const listDepartmentsByBuyer = async ({ id }, { first, after}, { dataSources: { db } }) => {
     const params = {
@@ -46,8 +50,8 @@ const resolvers = {
     }
 };
 
-export { 
-    resolvers as default, 
+export {
+    resolvers as default,
     resolvers as sampleFactoryResolvers,
     querySampleFactory
- };
+};

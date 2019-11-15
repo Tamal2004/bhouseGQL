@@ -31,6 +31,7 @@
     },
     "scripts": {
         "start": "nodemon --exec babel-node src/index --copy-files",
+        "start-prettier": "nodemon --exec node_modules/.bin/prettier --write \"src/**\" && babel-node src/index --copy-files",
         "test": "echo \"Error: no test specified\" && exit 1"
     }
 }
