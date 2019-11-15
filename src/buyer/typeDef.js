@@ -41,6 +41,8 @@ const typeDef = gql`
         cursor: Int
         node: Buyer
     }
+
+    
 `;
 
 export { typeDef as default, typeDef as Buyer };
