@@ -12,6 +12,7 @@ const typeDef = gql`
         code: String
         supplierNo: String
         countryId: String
+        country: Country
     }
 
     type SampleFactoryConnection {

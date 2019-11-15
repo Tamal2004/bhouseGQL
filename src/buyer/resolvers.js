@@ -1,55 +1,26 @@
-import { composeConnection, queryFactory } from '../libs';
+import { composeNode, composeList } from '../libs';
 
 // Local
-import keymap from './keymap';
-import { TABLE_BUYERS } from './constants';
+import queries from './queries';
 
 // Global
-import { queryDepartment } from '../department';
+import { departmentQueries } from '../department';
+import { countryQueries } from '../country';
 
-const queryBuyer = queryFactory(TABLE_BUYERS, keymap);
+const generateDepartmentsParams = ({ id }, { buyerId }) => ({
+    where: { [buyerId]: id }
+});
 
-const listBuyers = async (_, { first, after }, { dataSources: { db } }) =>
-    composeConnection({
-        first,
-        after,
-        key: keymap.id,
-        nodeList: await queryBuyer(null, db, false),
-        keymap
-    });
-
-const getBuyer = async (_, { id }, { dataSources: { db } }) => {
-    const params = {
-        where: { BuyerID: id }
-    };
-    const [buyer = null] = await queryBuyer(params, db);
-    return buyer;
-};
-
-const listDepartmentsByBuyer = async (
-    { id },
-    { first, after },
-    { dataSources: { db } }
-) => {
-    const params = {
-        where: { BuyerID: id }
-    };
-    return composeConnection({
-        first,
-        after,
-        key: keymap.id,
-        nodeList: await queryDepartment(params, db, false),
-        keymap
-    });
-};
+const generateCountryParams = ({ countryId }) => countryId;
 
 const resolvers = {
     Query: {
-        listBuyers,
-        getBuyer
+        listBuyers: composeList(queries),
+        getBuyer: composeNode(queries)
     },
     Buyer: {
-        departments: listDepartmentsByBuyer
+        country: composeNode(countryQueries, generateCountryParams),
+        departments: composeList(departmentQueries, generateDepartmentsParams)
     }
 };
 

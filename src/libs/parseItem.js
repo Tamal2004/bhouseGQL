@@ -1,4 +1,4 @@
-export const parseItem = (item = null, keymap) => {
+const parseItem = (item = null, keymap) => {
     const localKeys = Object.keys(keymap);
     const dbKeys = Object.values(keymap);
 
@@ -14,5 +14,6 @@ export const parseItem = (item = null, keymap) => {
 };
 
 // Parses a list of items
-export const parseList = (list, keyMap) =>
-    list.map(item => parseItem(item, keyMap));
+const parseList = (list, keyMap) => list.map(item => parseItem(item, keyMap));
+
+export { parseItem as default, parseItem, parseList };

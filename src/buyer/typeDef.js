@@ -13,7 +13,7 @@ const typeDef = gql`
         address: String
         state: String
         city: String
-        countryId: String
+        country: Country
         telephone: String
         mobile: String
         contactPerson: String

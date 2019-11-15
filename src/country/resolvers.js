@@ -1,56 +1,26 @@
-import { composeConnection, queryFactory } from '../libs';
+import { composeNode, composeList } from '../libs';
 
 // Local
-import keymap from './keymap';
-import { TABLE_COUNTRIES } from './constants';
+import queries from './queries';
 
 // Global
-import { querySampleFactory } from '../sampleFactory';
+import { sampleFactoryQueries } from '../sampleFactory';
 
-const queryCountry = queryFactory(TABLE_COUNTRIES, keymap);
-
-const listCountries = async (_, { first, after }, { dataSources: { db } }) =>
-    composeConnection({
-        first,
-        after,
-        key: keymap.id,
-        nodeList: await queryCountry(null, db, false),
-        keymap
-    });
-
-const getCountry = async (_, { id }, { dataSources: { db } }) => {
-    const params = {
-        where: { Country_id: id }
-    };
-    const [country = null] = await queryCountry(params, db);
-    return country;
-};
-
-const listSampleFactoriesByCountry = async (
-    { id },
-    { first, after },
-    { dataSources: { db } }
-) => {
-    const params = {
-        where: { COUNTRYID: id }
-    };
-    return composeConnection({
-        first,
-        after,
-        key: keymap.id,
-        nodeList: await querySampleFactory(params, db, false),
-        keymap
-    });
-};
+const generateSampleFactoriesParams = ({ id }, { countryId }) => ({
+    where: { [countryId]: id }
+});
 
 const resolvers = {
     Query: {
-        listCountries,
-        getCountry
+        listCountries: composeList(queries),
+        getCountry: composeNode(queries)
     },
     Country: {
-        sampleFactories: listSampleFactoriesByCountry
+        sampleFactories: composeList(sampleFactoryQueries, generateSampleFactoriesParams)
     }
 };
 
-export { resolvers as default, resolvers as countryResolvers };
+export {
+    resolvers as default,
+    resolvers as countryResolvers,
+};
