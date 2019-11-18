@@ -31,6 +31,14 @@ import { Orientation, orientationResolvers } from './orientation';
 import { PrintPosition, printPositionResolvers } from './printPosition';
 import { ArtWorkLocation, artWorkLocationResolvers } from './artworkLocation';
 import { ArtworkScale, artworkScaleResolvers } from './artworkScale';
+import { BoughtDetails, boughtDetailsResolvers } from './boughts/boughtDetails';
+import { Currency, currencyResolvers } from './currency';
+import { TrimSupplier, trimSupplierResolvers } from './trims/supplier';
+import { TrimCard, trimCardResolvers } from './trims/trimCard';
+import { TrimType, trimTypeResolvers } from './trims/trimType';
+import { TrimDetails, trimDetailsResolvers } from './trims/trimDetails';
+import { BackNeckDetails, backNeckDetailsResolvers } from './backnecks/backneckDetails';
+import { InkDetails, inkDetailsResolvers } from './inks/inkDetails';
 import { Query, queryResolvers } from './query';
 
 const knexConfig = {
@@ -73,7 +81,15 @@ const resolvers = merge(
     orientationResolvers,
     printPositionResolvers,
     artWorkLocationResolvers,
-    artworkScaleResolvers
+    artworkScaleResolvers,
+    boughtDetailsResolvers,
+    currencyResolvers,
+    trimSupplierResolvers,
+    trimCardResolvers,
+    trimTypeResolvers,
+    backNeckDetailsResolvers,
+    inkDetailsResolvers,
+    trimDetailsResolvers
 );
 
 const schema = makeExecutableSchema({
@@ -104,7 +120,15 @@ const schema = makeExecutableSchema({
                 Orientation,
                 PrintPosition,
                 ArtWorkLocation,
-                ArtworkScale
+                ArtworkScale,
+                BoughtDetails,
+                Currency,
+                TrimSupplier,
+                TrimCard,
+                TrimType,
+                BackNeckDetails,
+                InkDetails,
+                TrimDetails
             ],
     resolvers
 });
