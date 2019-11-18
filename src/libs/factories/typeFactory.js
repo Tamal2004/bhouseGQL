@@ -7,8 +7,8 @@ const listFactory = (table, keymap) => async (
     parse = true
 ) => {
     const loadedParams = { table, ...params };
-    const buyers = await db.query(loadedParams);
-    return parse ? parseList(buyers, keymap) : buyers;
+    const nodeList = await db.query(loadedParams);
+    return parse ? parseList(nodeList, keymap) : nodeList;
 };
 
 const nodeFactory = (query, dbKey) => async (id, db) => {

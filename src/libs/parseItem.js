@@ -14,6 +14,6 @@ const parseItem = (item = null, keymap) => {
 };
 
 // Parses a list of items
-const parseList = (list, keyMap) => list.map(item => parseItem(item, keyMap));
+const parseList = (list = [], keyMap) => list.map(item => parseItem(item, keyMap));
 
 export { parseItem as default, parseItem, parseList };

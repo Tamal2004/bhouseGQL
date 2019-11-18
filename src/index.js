@@ -21,7 +21,6 @@ const knexConfig = {
     }
 };
 
-const db = new SQLDatabase(knexConfig);
 
 // Root resolver
 const resolvers = merge(
@@ -37,13 +36,14 @@ const schema = makeExecutableSchema({
     resolvers
 });
 
+
 // The ApolloServer constructor requires two parameters: your schema
 // definition and your set of resolvers.
 const server = new ApolloServer({
     schema,
     playground: true,
     introspection: true,
-    dataSources: () => ({ db })
+    dataSources: () => ({ db: new SQLDatabase(knexConfig) })
 });
 
 // The `listen` method launches a web server.
