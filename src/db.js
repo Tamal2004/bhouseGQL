@@ -61,39 +61,43 @@ class SQLDatabase extends SQLDataSource {
             query = query.where(where);
         }
 
-        const debugQuery = this.db
-            .with(
-                'cte',
+        const tblName = 'TrimsDetails';
+        const idxName = 'TrimsId';
+
+        const tableQuery = this.db
+            .select([
+                '*',
                 this.db.raw(
-                    'select *, row_number() over (order by TrimsId) as rowNumber from TrimsDetails'
+                    `row_number() over (order by ${idxName}) as rowNumber`
                 )
-            )
-            .with(
-                'current',
-                this.db
-                    .select('rowNumber')
-                    .from('cte')
-                    .where({ TrimsId: 195 })
-            )
-            .select('cte.rowNumber')
-            .from('cte')
-            .innerJoin('current', function() {
-                // this.on('current.rowNumber', '>', 'cte.rowNumber')
-                this.on.raw('abs(current.rowNumber - cte.rowNumber) < 2')
-            })
-            // .whereRaw('[cte].rowNumber > [current].rowNumber')
-            // .where('rowNumber', '>', 'current.rowNumber');
-        // const debugQuery = this.db.raw(`
-        //     with [cte] as (select *, row_number() over (order by TrimsId) as rowNumber from TrimsDetails),
-        //     [current] as (select [rowNumber] from [cte] where [TrimsId] = 195) select [cte].TrimsId from [cte], [current]
-        //     where abs([cte].rowNumber - [current].rowNumber) <= 2
-        //     order by [cte].rowNumber
-        //
-        //     `);
+            ])
+            .from(tblName);
+
+        const indexQuery = this.db
+            .select('rowNumber')
+            .from('tableQuery')
+            .where(idxName, 195);
+
+        // Swap variables for 'before' pagination
+        const joinQueryIndex =
+            '([tableQuery].[rowNumber] - [indexQuery].[rowNumber])';
+        const joinQuery = this.db.raw(
+            `${joinQueryIndex} >= 0 and ${joinQueryIndex} < ?`,
+            10
+        );
+
+        const debugQuery = this.db
+            .with('tableQuery', tableQuery)
+            .with('indexQuery', indexQuery)
+            .select(['tableQuery.rowNumber', `tableQuery.${idxName}`])
+            .from('tableQuery')
+            .join('indexQuery', joinQuery)
+            .orderBy(idxName);
 
         console.log(debugQuery.toString());
 
-        // console.log(await debugQuery);
+        // console.log((await debugQuery).length);
+        console.log(await debugQuery);
 
         return query;
     };
