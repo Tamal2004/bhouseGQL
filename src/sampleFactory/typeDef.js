@@ -2,7 +2,7 @@ import { gql } from 'apollo-server';
 
 const typeDef = gql`
     extend type Query {
-        listSampleFactories(first: Int, after: Int): SampleFactoryConnection
+        listSampleFactories(first: Int, after: ID): SampleFactoryConnection
         getSampleFactory(id: Int!): SampleFactory
     }
 
@@ -11,7 +11,6 @@ const typeDef = gql`
         factory: String
         code: String
         supplierNo: String
-        countryId: String
         country: Country
     }
 
@@ -22,7 +21,7 @@ const typeDef = gql`
     }
 
     type SampleFactoryEdge {
-        cursor: Int
+        cursor: ID
         node: SampleFactory
     }
 `;

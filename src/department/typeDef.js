@@ -2,7 +2,7 @@ import { gql } from 'apollo-server';
 
 const typeDef = gql`
     extend type Query {
-        listDepartments(first: Int, after: Int): DepartmentConnection
+        listDepartments(first: Int, after: ID): DepartmentConnection
         getDepartment(id: Int!): Department
     }
 
@@ -26,14 +26,10 @@ const typeDef = gql`
     }
 
     type DepartmentEdge {
-        cursor: Int
+        cursor: ID
         node: Department
     }
 
-    type PageInfo {
-        lastCursor: Int
-        hasNextPage: Boolean
-    }
 `;
 
 export { typeDef as default, typeDef as Department };

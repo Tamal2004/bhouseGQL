@@ -2,18 +2,18 @@ import { gql } from 'apollo-server';
 
 const typeDef = gql`
     extend type Query {
-        listCountries(first: Int, after: Int): CountryConnection
+        listCountries(first: Int, after: ID offset: Int): CountryConnection
         getCountry(id: Int!): Country
     }
-
+    
     type Country {
-        id: Int!
+        id: ID!
         country: String
         code: String
         numDigits: String
         description: String
         isActive: Boolean
-        sampleFactories(first: Int, after: Int): SampleFactoryConnection
+        sampleFactories(first: Int, after: ID): SampleFactoryConnection
     }
 
     type CountryConnection {
@@ -23,7 +23,7 @@ const typeDef = gql`
     }
 
     type CountryEdge {
-        cursor: Int
+        cursor: ID
         node: Country
     }
 `;

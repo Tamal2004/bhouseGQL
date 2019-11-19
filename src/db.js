@@ -94,12 +94,12 @@ class SQLDatabase extends SQLDataSource {
             .join('indexQuery', joinQuery)
             .orderBy(idxName);
 
-        console.log(debugQuery.toString());
+        // console.log(debugQuery.toString());
 
         // console.log((await debugQuery).length);
-        console.log(await debugQuery);
+        // console.log(await debugQuery);
 
-        return query;
+        return query.cache(this.cacheTimeout);
     };
 }
 
