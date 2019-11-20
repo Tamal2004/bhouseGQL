@@ -18,7 +18,7 @@ const nodeFactory = (query, dbKey) => async (id, db) => {
 };
 
 const connectionFactory = (keymap, key) => params =>
-    composeConnection({ keymap, key: keymap[key], ...params });
+    composeConnection({ keymap, key: keymap[key], nodeList: [], ...params });
 
 const typeFactory = (table, keymap, key = 'id') => {
     const list = listFactory(table, keymap);

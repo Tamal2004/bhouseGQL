@@ -46,6 +46,47 @@ class SQLDatabase extends SQLDataSource {
         });
     };
 
+    queryConnection = async (a) => {
+        console.log(a)
+        return [];
+        // const tblName = table;
+        // const idxName = key;
+        //
+        // const tableQuery = this.db
+        //     .select([
+        //         '*',
+        //         this.db.raw(
+        //             `row_number() over (order by ${idxName}) as rowNumber`
+        //         )
+        //     ])
+        //     .from(tblName);
+        //
+        // const indexQuery = this.db
+        //     .select('rowNumber')
+        //     .from('tableQuery')
+        //     .where(idxName, 195);
+        //
+        // // Swap variables for 'before' pagination
+        // const joinQueryIndex =
+        //     '([tableQuery].[rowNumber] - [indexQuery].[rowNumber])';
+        // const joinQuery = this.db.raw(
+        //     `${joinQueryIndex} >= 0 and ${joinQueryIndex} < ?`,
+        //     10
+        // );
+        //
+        // const debugQuery = this.db
+        //     .with('tableQuery', tableQuery)
+        //     .with('indexQuery', indexQuery)
+        //     .select('*')
+        //     .from('tableQuery')
+        //     .join('indexQuery', joinQuery)
+        //     .orderBy(idxName);
+        //
+        //
+
+    }
+
+
     query = async params => {
         const { columns = '*', table, where = undefined } = params;
         let query = this.db.select(columns).from(table);

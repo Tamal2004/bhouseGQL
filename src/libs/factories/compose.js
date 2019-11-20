@@ -11,6 +11,13 @@ const composeList = (
     });
 };
 
+const resolveConnection = (
+    { connection, list, keymap },
+    generateParams = () => null
+) => async (...resolverArgs) => {
+    return connection(...resolverArgs, generateParams);
+};
+
 const composeNode = ({ node }, generateParams = null) => async (
     parent,
     { id },
