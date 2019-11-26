@@ -12,10 +12,11 @@ const composeList = (
 };
 
 const resolveConnection = (
-    { connection, list, keymap },
+    { newConnection, keymap },
     generateParams = () => null
 ) => async (...resolverArgs) => {
-    return connection(...resolverArgs, generateParams);
+    const [parent] = resolverArgs;
+    return newConnection(generateParams(parent, keymap), ...resolverArgs);
 };
 
 const composeNode = ({ node }, generateParams = null) => async (
@@ -30,7 +31,7 @@ const composeNode = ({ node }, generateParams = null) => async (
 const composeConnection = ({
     first = 10,
     after = null,
-    key = 'id',
+    key,
     nodeList = [],
     keymap
 }) => {
@@ -61,9 +62,41 @@ const composeConnection = ({
     return { totalCount, edges, pageInfo };
 };
 
+const newComposeConnection = ({
+    key = 'id',
+    nodeList = [],
+    keymap,
+    toCursor,
+    fromCursor
+}) => {
+    const totalCount = nodeList.length;
+    // Escape for no items
+    if (!totalCount) return null;
+
+    const nodeKeys = nodeList.map(node => node[key].toString());
+
+    // Edges
+    const edges = nodeList.map(node => ({
+        cursor: toCursor(node[key]),
+        node: parseItem(node, keymap)
+    }));
+
+    // Page Info
+    const lastCursor = edges[edges.length - 1].cursor;
+    const hasNextPage =
+        nodeKeys.indexOf(fromCursor(lastCursor)) + 1 < totalCount;
+    const pageInfo = {
+        lastCursor,
+        hasNextPage
+    };
+    return { totalCount, edges, pageInfo };
+};
+
 export {
     composeConnection as default,
     composeList,
     composeNode,
-    composeConnection
+    composeConnection,
+    resolveConnection,
+    newComposeConnection
 };

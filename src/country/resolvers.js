@@ -1,4 +1,4 @@
-import { composeNode, composeList } from '../libs';
+import { composeNode, composeList, resolveConnection } from '../libs';
 
 // Local
 import queries from './queries';
@@ -12,7 +12,8 @@ const generateSampleFactoriesParams = ({ id }, { countryId }) => ({
 
 const resolvers = {
     Query: {
-        listCountries: composeList(queries),
+        // listCountries: composeList(queries),
+        listCountries: resolveConnection(queries),
         getCountry: composeNode(queries)
     },
     Country: {
