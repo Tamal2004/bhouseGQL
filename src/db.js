@@ -1,6 +1,7 @@
 import { SQLDataSource } from 'datasource-sql';
 import DataLoader from 'dataloader';
 import { uniq } from 'lodash';
+import parseItem from './libs';
 
 class SQLDatabase extends SQLDataSource {
     cacheTimeout = 60;
@@ -50,27 +51,22 @@ class SQLDatabase extends SQLDataSource {
         first = 10,
         after = null,
         where = {},
+        nodeFields = ['*'],
         table,
         key,
         fromCursor
     }) => {
-        const tblName = table;
-        const idxName = key;
-
         const tableQuery = this.db
             .select([
-                '*',
-                this.db.raw(
-                    `row_number() over (order by ${idxName}) as rowNumber`
-                )
+                ...nodeFields,
+                this.db.raw(`row_number() over (order by ${key}) as rowNumber`)
             ])
-            .from(tblName)
+            .from(table)
             .where(where);
 
-        // //
-        // const countQuery = this.db.count.from('tableQuery');
-
-        const indexSearchParams = after ? { [idxName]: fromCursor(after) } : { rowNumber: 1 };
+        const indexSearchParams = after
+            ? { [key]: fromCursor(after) }
+            : { rowNumber: 1 };
 
         const indexQuery = this.db
             .select('rowNumber')
@@ -80,10 +76,10 @@ class SQLDatabase extends SQLDataSource {
         // Swap variables for 'before' pagination
         const joinQueryIndex =
             '([tableQuery].[rowNumber] - [indexQuery].[rowNumber])';
+        const floorOperator = after ? '' : '=';
+        const ceilingOperator = after ? '=' : '';
         const joinQuery = this.db.raw(
-            `${joinQueryIndex} >${!after ? '=' : ''} 0 and ${joinQueryIndex} <${
-                after ? '=' : ''
-            } ?`,
+            `${joinQueryIndex} >${floorOperator} 0 and ${joinQueryIndex} <${ceilingOperator} ?`,
             first
         );
         // const joinQuery = this.db.raw(
@@ -91,13 +87,58 @@ class SQLDatabase extends SQLDataSource {
         //     first
         // );
 
-        return await this.db
+        const resultQuery = this.db
+            .select([
+                ...nodeFields,
+                'tableQuery.rowNumber',
+                this.db.raw(
+                    `row_number() over (order by tableQuery.rowNumber) as countNumber`
+                )
+            ])
+            .from('tableQuery')
+            .join('indexQuery', joinQuery);
+
+        const countSubColumn = this.db.raw(`
+            case countNumber 
+                when 1 then 
+                    (select count(*) from tableQuery) 
+                else 
+                    cast(null as int) 
+            end as count`);
+
+        const nodeList = await this.db
             .with('tableQuery', tableQuery)
             .with('indexQuery', indexQuery)
-            .select('tableQuery.*')
-            .from('tableQuery')
-            .join('indexQuery', joinQuery)
-            .orderBy(idxName);
+            .with('resultQuery', resultQuery)
+            .select([...nodeFields, 'rowNumber', countSubColumn])
+            .from('resultQuery')
+            .orderBy(key);
+
+        return nodeList.reduce(
+            (acm, { count, rowNumber, ...node }) => {
+                // Min rowNumber
+                const startIndex = acm.startIndex
+                    ? acm.startIndex > rowNumber
+                        ? rowNumber
+                        : acm.startIndex
+                    : rowNumber;
+
+                // Max rowNumber
+                const endIndex = acm.endIndex
+                    ? acm.endIndex < rowNumber
+                        ? rowNumber
+                        : acm.endIndex
+                    : rowNumber;
+
+                return {
+                    nodeList: [...acm.nodeList, node],
+                    totalCount: acm.totalCount || count,
+                    startIndex,
+                    endIndex
+                };
+            },
+            { nodeList: [], startIndex: null, endIndex: null, totalCount: null }
+        );
     };
 
     query = async params => {

@@ -1,4 +1,4 @@
-import { composeNode, composeList } from '../libs';
+import { resolveNode, resolveConnection } from '../libs';
 
 // Local
 import queries from './queries';
@@ -15,12 +15,12 @@ const generateCountryParams = ({ countryId }) => countryId;
 
 const resolvers = {
     Query: {
-        listBuyers: composeList(queries),
-        getBuyer: composeNode(queries)
+        listBuyers: resolveConnection(queries),
+        getBuyer: resolveNode(queries)
     },
     Buyer: {
-        country: composeNode(countryQueries, generateCountryParams),
-        departments: composeList(departmentQueries, generateDepartmentsParams)
+        country: resolveNode(countryQueries, generateCountryParams),
+        departments: resolveConnection(departmentQueries, generateDepartmentsParams)
     }
 };
 

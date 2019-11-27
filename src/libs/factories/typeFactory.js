@@ -1,6 +1,7 @@
 import { parseList } from '../parseItem';
-import { composeConnection, newComposeConnection } from './compose';
+import { composeConnection } from '../compose';
 import cursorFactory from './cursorFactory';
+import { findNodeSelections } from '../selections';
 
 const listFactory = (table, keymap) => async (
     params = {},
@@ -18,53 +19,40 @@ const nodeFactory = (query, dbKey) => async (id, db) => {
     return node;
 };
 
-const connectionFactory = (keymap, key) => params =>
-    composeConnection({ keymap, key: keymap[key], nodeList: [], ...params });
-
-const newConnectionFactory = (table, keymap, rawKey) => async (
+const connectionFactory = (table, keymap, key) => async (
     params,
     parent,
     inputArgs,
     { dataSources: { db } },
     ast
 ) => {
-    console.log(
-        ast.fieldNodes[0].selectionSet.selections[0].name
-    );
-    const key = keymap[rawKey] || 'id';
-    const cursors = cursorFactory(key);
+    const { toCursor, fromCursor } = cursorFactory(key);
     const loadedParams = {
         table,
         key,
+        nodeFields: findNodeSelections(ast, keymap),
+        fromCursor,
         ...inputArgs,
-        ...params,
-        ...cursors
+        ...params
     };
-    const nodeList = await db.queryConnection(loadedParams);
 
-    // console.log({
-    //     keymap,
-    //     key,
-    //     nodeList,
-    //     ...inputArgs,
-    //     ...loadedParams
-    // });
+    const nodeConnection = await db.queryConnection(loadedParams);
 
-    return newComposeConnection({
-        keymap,
+    return composeConnection({
         key,
-        nodeList,
-        ...cursors
+        toCursor,
+        keymap,
+        ...nodeConnection
     });
 };
 
-const typeFactory = (table, keymap, key = 'id') => {
+const typeFactory = (table, keymap, rawKey = 'id') => {
+    const key = keymap[rawKey];
     const list = listFactory(table, keymap);
     return {
         list,
-        connection: connectionFactory(keymap, key),
-        newConnection: newConnectionFactory(table, keymap, key),
-        node: nodeFactory(list, keymap[key]),
+        connection: connectionFactory(table, keymap, key),
+        node: nodeFactory(list, key),
         keymap
     };
 };

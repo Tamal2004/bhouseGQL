@@ -1,12 +1,12 @@
-import { composeNode, composeList } from '../libs';
+import { resolveNode, resolveConnection } from '../libs';
 
 // Local
 import queries from './queries';
 
 const resolvers = {
     Query: {
-        listDepartments: composeList(queries),
-        getDepartment: composeNode(queries)
+        listDepartments: resolveConnection(queries),
+        getDepartment: resolveNode(queries)
     }
 };
 

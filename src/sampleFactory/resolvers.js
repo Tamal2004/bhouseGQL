@@ -1,4 +1,4 @@
-import { composeNode, composeList } from '../libs';
+import { resolveNode, resolveConnection } from '../libs';
 
 // Local
 import queries from './queries';
@@ -10,11 +10,11 @@ const generateCountryParams = ({ countryId }) => countryId;
 
 const resolvers = {
     Query: {
-        listSampleFactories: composeList(queries),
-        getSampleFactory: composeNode(queries)
+        listSampleFactories: resolveConnection(queries),
+        getSampleFactory: resolveNode(queries)
     },
     SampleFactory: {
-        country: composeNode(countryQueries, generateCountryParams)
+        country: resolveNode(countryQueries, generateCountryParams)
     }
 };
 
