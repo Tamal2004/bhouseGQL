@@ -7,6 +7,11 @@ class SQLDatabase extends SQLDataSource {
     cacheTimeout = 60;
 
     loaders = [];
+    connectionLoaders = [];
+
+    getConnectionLoader = () => {};
+    setConnectionLoader = () => {};
+    checkConnectionLoader = ({ column, table, where }) => {};
 
     getLoader = ({ column, table, where }) => {
         const whereKey = Object.keys(where)[0];

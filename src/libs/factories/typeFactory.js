@@ -30,7 +30,7 @@ const connectionFactory = (table, keymap, key) => async (
     const loadedParams = {
         table,
         key,
-        nodeFields: findNodeSelections(ast, keymap),
+        nodeFields: findNodeSelections(ast, keymap, key),
         fromCursor,
         ...inputArgs,
         ...params
