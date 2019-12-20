@@ -23,6 +23,7 @@ import { FabricFor, fabricForResolvers } from './fabrics/fabricFor';
 import { Gsm, gsmResolvers } from './fabrics/finishGsm';
 import { FinishWash, finishWashResolvers } from './fabrics/finishWash';
 import { FabricType, fabricTypeResolvers } from './fabrics/fabricType';
+import { FabricDetails, fabricDetailsResolvers } from './fabrics/fabricDetails';
 import { ArmHole, armHoleResolvers } from './armhole';
 import { Hemline, hemlineResolvers } from './hemline';
 import { LabelType, labelTypeResolvers } from './labelType';
@@ -39,6 +40,17 @@ import { TrimType, trimTypeResolvers } from './trims/trimType';
 import { TrimDetails, trimDetailsResolvers } from './trims/trimDetails';
 import { BackNeckDetails, backNeckDetailsResolvers } from './backnecks/backneckDetails';
 import { InkDetails, inkDetailsResolvers } from './inks/inkDetails';
+import { Sample, sampleResolvers } from './samples/sampleMain';
+import { CadAvailability, cadAvailabilityResolvers } from './cads/availability';
+import { CadMain, cadMainResolvers } from './cads/cadMain';
+import { CadStatus, cadStatusResolvers } from './cads/cadStatus';
+import { Collection, collectionResolvers } from './cads/collection';
+import { Designer, designerResolvers } from './cads/designer';
+import { DesignerLocation, designerLocationResolvers } from './cads/designerLocation';
+import { LicenceStatus, licenceStatusResolvers } from './cads/licenceStatus';
+import { Licensor, licensorResolvers } from './cads/licensor';
+import { PrintTechnique, printTechniqueResolvers } from './cads/printTechnique';
+import { Source, sourceResolvers } from './cads/source';
 import { Query, queryResolvers } from './query';
 
 const knexConfig = {
@@ -89,7 +101,19 @@ const resolvers = merge(
     trimTypeResolvers,
     backNeckDetailsResolvers,
     inkDetailsResolvers,
-    trimDetailsResolvers
+    trimDetailsResolvers,
+    fabricDetailsResolvers,
+    sampleResolvers,
+    cadAvailabilityResolvers,
+    cadMainResolvers,
+    cadStatusResolvers,
+    collectionResolvers,
+    designerResolvers,
+    designerLocationResolvers,
+    licenceStatusResolvers,
+    licensorResolvers,
+    printTechniqueResolvers,
+    sourceResolvers
 );
 
 const schema = makeExecutableSchema({
@@ -128,7 +152,19 @@ const schema = makeExecutableSchema({
                 TrimType,
                 BackNeckDetails,
                 InkDetails,
-                TrimDetails
+                TrimDetails,
+                FabricDetails,
+                Sample,
+                CadAvailability,
+                CadMain,
+                CadStatus,
+                Collection,
+                Designer,
+                DesignerLocation,
+                LicenceStatus,
+                Licensor,
+                PrintTechnique,
+                Source
             ],
     resolvers
 });
