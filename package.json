@@ -6,7 +6,7 @@
     "author": "Matt Tamal",
     "license": "ISC",
     "dependencies": {
-        "apollo-server": "^2.9.7",
+        "apollo-server": "^2.25.4",
         "dataloader": "^1.4.0",
         "datasource-sql": "^1.0.2",
         "graphql": "^14.5.8",
